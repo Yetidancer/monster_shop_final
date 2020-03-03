@@ -17,14 +17,14 @@ RSpec.describe 'New Merchant Discount' do
       expect(current_path).to eq("/merchant/discounts/new")
     end
 
-    xit 'I can create a discount for a merchant' do
+    it 'I can create a discount for a merchant' do
       items_number = 5
       percent_off = 10
 
       visit "/merchant/discounts/new"
 
-      fill_in 'Items Criteria', with: items_number
-      fill_in 'Percent Off', with: percent_off
+      fill_in :items_number, with: items_number
+      fill_in :percent_off, with: percent_off
 
       click_button "Create Discount"
 
@@ -33,12 +33,12 @@ RSpec.describe 'New Merchant Discount' do
       expect(page).to have_content(percent_off)
     end
 
-    xit 'I can not create a discount for a merchant with an incomplete form' do
+    it 'I can not create a discount for a merchant with an incomplete form' do
       percent_off = 10
 
       visit "/merchant/discounts/new"
 
-      fill_in 'Percent Off', with: percent_off
+      fill_in :percent_off, with: percent_off
 
       click_button 'Create Discount'
 

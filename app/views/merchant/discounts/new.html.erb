@@ -1,10 +1,6 @@
 <h2>New Discount</h2>
 <%= form_tag "/merchant/discounts" do %>
-  <%= label_tag :items_number %>
-  <%= text_field_tag :items_number %>
+  <%= render 'form' %>
 
-  <%= label_tag :percent_off %>
-  <%= text_field_tag :percent_off %>
-
-  <%= submit_tag 'Create Item' %>
+  <%= submit_tag 'Create Discount' %>
 <% end %>
