@@ -74,8 +74,8 @@ RSpec.describe Cart do
       expect(@cart.discount?(@giant)).to eq(true)
     end
 
-    it '.applied_discount()' do
-      expect(@cart.applied_discount(@giant)).to eq(@discount_2)
+    it '.applicable_discount()' do
+      expect(@cart.applicable_discount(@giant)).to eq(@discount_2)
     end
 
     it '.discounted_subtotal()' do

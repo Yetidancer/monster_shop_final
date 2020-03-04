@@ -53,11 +53,11 @@ class Cart
     self.count_of(item.id) >= self.list_discounts(item).minimum(:items_number)
   end
 
-  def applied_discount(item)
+  def applicable_discount(item)
     Discount.where("items_number <= ? AND merchant_id = ?", self.count_of(item.id), item.merchant_id).order(percent_off: :desc).first
   end
 
   def discounted_subtotal(item)
-    (100 - self.applied_discount(item).percent_off) * 0.01 * self.subtotal_of(item.id)
+    (100 - self.applicable_discount(item).percent_off) * 0.01 * self.subtotal_of(item.id)
   end
 end

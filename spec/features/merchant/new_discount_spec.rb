@@ -42,7 +42,58 @@ RSpec.describe 'New Merchant Discount' do
 
       click_button 'Create Discount'
 
-      expect(page).to have_content("items_number: [\"can't be blank\"]")
+      expect(page).to have_content("items_number: [\"is not a number\", \"can't be blank\"]")
+      expect(page).to have_button('Create Discount')
+
+      items_number = 10
+
+      visit "/merchant/discounts/new"
+
+      fill_in :items_number, with: items_number
+
+      click_button 'Create Discount'
+
+      expect(page).to have_content("percent_off: [\"is not a number\", \"can't be blank\"]")
+    end
+
+    it 'I can not create a discount for a merchant with an incorrect form' do
+      percent_off = 101
+      items_number = 10
+
+      visit "/merchant/discounts/new"
+
+      fill_in :percent_off, with: percent_off
+      fill_in :items_number, with: items_number
+
+      click_button 'Create Discount'
+
+      expect(page).to have_content("percent_off: [\"must be less than or equal to 100\"]")
+      expect(page).to have_button('Create Discount')
+
+      percent_off = 55.5
+      items_number = 10
+
+      visit "/merchant/discounts/new"
+
+      fill_in :percent_off, with: percent_off
+      fill_in :items_number, with: items_number
+
+      click_button 'Create Discount'
+
+      expect(page).to have_content("percent_off: [\"must be an integer\"]")
+      expect(page).to have_button('Create Discount')
+
+      percent_off = 50
+      items_number = -10
+
+      visit "/merchant/discounts/new"
+
+      fill_in :percent_off, with: percent_off
+      fill_in :items_number, with: items_number
+
+      click_button 'Create Discount'
+
+      expect(page).to have_content("items_number: [\"must be greater than 0\"]")
       expect(page).to have_button('Create Discount')
     end
   end

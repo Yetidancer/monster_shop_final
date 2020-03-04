@@ -54,8 +54,8 @@ RSpec.describe OrderItem do
       expect(@order_item_4.discount?).to eq(true)
     end
 
-    it '.applied_discount' do
-      expect(@order_item_4.applied_discount).to eq(@discount_1)
+    it '.applicable_discount' do
+      expect(@order_item_4.applicable_discount).to eq(@discount_1)
     end
 
     it '.apply_discount' do

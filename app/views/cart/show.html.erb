@@ -12,7 +12,7 @@
       <p>Subtotal: <%= number_to_currency(cart.subtotal_of(item.id)) %></p>
 
       <% if cart.discount?(item) %>
-        Bulk Discount on <%="#{item.name}: #{number_to_percentage(cart.applied_discount(item).percent_off)}" %><br>
+        Bulk Discount on <%="#{item.name}: #{number_to_percentage(cart.applicable_discount(item).percent_off)}" %><br>
         Discounted Subtotal: <%= number_to_currency(cart.discounted_subtotal(item)) %>
       <% end %>
 
