@@ -3,5 +3,4 @@ class Discount < ApplicationRecord
 
   validates_presence_of :items_number,
                         :percent_off
-
 end

@@ -28,6 +28,14 @@ class OrderItem < ApplicationRecord
   end
 
   def applied_discount
-    Discount.where("items_number < ? AND merchant_id = ?", self.quantity, get_merchant_id).order(percent_off: :desc).first
+    @applied_discount ||= Discount.where("items_number < ? AND merchant_id = ?", self.quantity, get_merchant_id).order(percent_off: :desc).first
+  end
+
+  def apply_discount
+    self.update(discount_id: self.applied_discount.id)
+  end
+
+  def discounted_subtotal
+    (100 - self.applied_discount.percent_off) * 0.01 * self.subtotal
   end
 end
