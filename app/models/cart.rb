@@ -50,11 +50,11 @@ class Cart
 
   def discount?(item)
     return false if list_discounts(item).blank?
-    self.count_of(item.id) > self.list_discounts(item).minimum(:items_number)
+    self.count_of(item.id) >= self.list_discounts(item).minimum(:items_number)
   end
 
   def applied_discount(item)
-    Discount.where("items_number < ? AND merchant_id = ?", self.count_of(item.id), item.merchant_id).order(percent_off: :desc).first
+    Discount.where("items_number <= ? AND merchant_id = ?", self.count_of(item.id), item.merchant_id).order(percent_off: :desc).first
   end
 
   def discounted_subtotal(item)

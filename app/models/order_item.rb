@@ -25,11 +25,11 @@ class OrderItem < ApplicationRecord
 
   def discount?
     return false if list_discounts.blank?
-    self.quantity > self.list_discounts.minimum(:items_number)
+    self.quantity >= self.list_discounts.minimum(:items_number)
   end
 
   def applied_discount
-    Discount.where("items_number < ? AND merchant_id = ?", self.quantity, get_merchant_id).order(percent_off: :desc).first
+    Discount.where("items_number <= ? AND merchant_id = ?", self.quantity, get_merchant_id).order(percent_off: :desc).first
   end
 
   def apply_discount
