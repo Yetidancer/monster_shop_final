@@ -13,9 +13,14 @@ RSpec.describe 'Order Show Page' do
       @user = User.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan_1@example.com', password: 'securepassword')
       @order_1 = @user.orders.create!(status: "packaged")
       @order_2 = @user.orders.create!(status: "pending")
+      @order_3 = @user.orders.create!(status: "pending")
       @order_item_1 = @order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: true)
       @order_item_2 = @order_2.order_items.create!(item: @giant, price: @hippo.price, quantity: 2, fulfilled: true)
       @order_item_3 = @order_2.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
+      @order_item_4 = @order_3.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
+      @order_item_5 = @order_3.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2, fulfilled: false)
+      @discount_1 = @brian.discounts.create!(percent_off: 10, items_number: 5)
+      @discount_2 = @brian.discounts.create!(percent_off: 10, items_number: 5)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
     end
 
@@ -44,7 +49,7 @@ RSpec.describe 'Order Show Page' do
         expect(page).to have_content(@order_item_2.price)
         expect(page).to have_content(@order_item_2.subtotal)
       end
-
+ 
       within "#order-item-#{@order_item_3.id}" do
         expect(page).to have_link(@order_item_3.item.name)
         expect(page).to have_content(@order_item_3.item.description)

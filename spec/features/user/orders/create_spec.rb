@@ -6,11 +6,12 @@ RSpec.describe 'Create Order' do
     before :each do
       @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
-      @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
-      @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
-      @hippo = @brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
+      @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 50 )
+      @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 30 )
+      @hippo = @brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 30 )
       @user = User.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
+      @discount_1 = @brian.discounts.create!(percent_off: 10, items_number: 5)
     end
 
     it 'I can click a link to get to create an order' do
@@ -33,6 +34,46 @@ RSpec.describe 'Create Order' do
 
       within "#order-#{order.id}" do
         expect(page).to have_link(order.id)
+      end
+    end
+
+    it 'I can see my discount applied in the cart' do
+      visit item_path(@hippo)
+      click_button 'Add to Cart'
+
+      visit '/cart'
+
+      within "#item-#{@hippo.id}" do
+        click_button 'More of This!'
+        click_button 'More of This!'
+        click_button 'More of This!'
+        expect(page).to have_content("Quantity: 4")
+        expect(page).to_not have_content("Bulk Discount on")
+        expect(page).to_not have_content("Discounted Subtotal")
+      end
+
+      within "#item-#{@hippo.id}" do
+        click_button 'More of This!'
+        click_button 'More of This!'
+        expect(page).to have_content("Quantity: 6")
+        expect(page).to have_content(@discount_1.percent_off)
+        expect(page).to have_content(270)
+      end
+
+      click_button 'Check Out'
+
+      order = Order.last
+      order_item = order.order_items.last
+
+      expect(current_path).to eq('/profile/orders')
+      expect(page).to have_content('Order created successfully!')
+      expect(page).to have_link('Cart: 0')
+
+      expect(order_item.price).to eq(45)
+      
+      within "#order-#{order.id}" do
+        expect(page).to have_link(order.id)
+        expect(page).to have_content("Total: $270.00")
       end
     end
   end

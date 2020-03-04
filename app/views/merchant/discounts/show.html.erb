@@ -1,0 +1,5 @@
+<h3>ID: <%= @discount.id %></h3>
+<p>Number of items needed: <%= @discount.items_number %></p>
+<p>Percent off: <%= @discount.percent_off %></p>
+<%= button_to "Edit", "/merchant/discounts/#{@discount.id}/edit", method: :get %>
+<%= button_to 'Delete', "/merchant/discounts/#{@discount.id}", method: :delete %>
