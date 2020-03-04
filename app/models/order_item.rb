@@ -24,6 +24,7 @@ class OrderItem < ApplicationRecord
   end
 
   def discount?
+    return false if list_discounts.blank?
     self.quantity > self.list_discounts.minimum(:items_number)
   end
 

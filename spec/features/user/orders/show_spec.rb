@@ -49,7 +49,7 @@ RSpec.describe 'Order Show Page' do
         expect(page).to have_content(@order_item_2.price)
         expect(page).to have_content(@order_item_2.subtotal)
       end
-
+ 
       within "#order-item-#{@order_item_3.id}" do
         expect(page).to have_link(@order_item_3.item.name)
         expect(page).to have_content(@order_item_3.item.description)

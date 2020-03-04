@@ -61,10 +61,10 @@ RSpec.describe OrderItem do
     it '.apply_discount' do
       @order_item_4.apply_discount
       expect(@order_item_4.discount_id).to eq(@discount_1.id)
+      expect(@order_item_4.price).to eq(45)
     end
 
     it '.discounted_subtotal' do
-      @order_item_4.apply_discount
       expect(@order_item_4.discounted_subtotal).to eq(495)
     end
   end
