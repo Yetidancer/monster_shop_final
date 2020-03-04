@@ -9,9 +9,9 @@ OrderItem.destroy_all
 Order.destroy_all
 Item.destroy_all
 Review.destroy_all
+Discount.destroy_all
 User.destroy_all
 Merchant.destroy_all
-Discount.destroy_all
 
 merchant_1 = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
 merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
@@ -32,5 +32,5 @@ order_item_2 = order_2.order_items.create!(item: hippo, price: hippo.price, quan
 order_item_3 = order_2.order_items.create!(item: ogre, price: ogre.price, quantity: 12, fulfilled: false)
 order_item_4 = order_3.order_items.create!(item: giant, price: giant.price, quantity: 7, fulfilled: false)
 
-discount_1 = merchant_1.discounts.create!(percent_off: 10, items_number: 5)
-discount_2 = merchant_1.discounts.create!(percent_off: 20, items_number: 10)
+discount_1 = merchant_1.discounts.create!(percent_off: 5, items_number: 20)
+discount_2 = merchant_1.discounts.create!(percent_off: 2, items_number: 10)

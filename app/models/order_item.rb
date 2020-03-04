@@ -20,7 +20,7 @@ class OrderItem < ApplicationRecord
   end
 
   def get_merchant_id
-    self.item.merchant.id
+    self.item.merchant_id
   end
 
   def discount?
@@ -28,7 +28,7 @@ class OrderItem < ApplicationRecord
   end
 
   def applied_discount
-    @applied_discount ||= Discount.where("items_number < ? AND merchant_id = ?", self.quantity, get_merchant_id).order(percent_off: :desc).first
+    Discount.where("items_number < ? AND merchant_id = ?", self.quantity, get_merchant_id).order(percent_off: :desc).first
   end
 
   def apply_discount

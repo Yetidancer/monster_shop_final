@@ -29,7 +29,8 @@ RSpec.describe 'Merchant Discount Index' do
       within "#discount-#{@discount_1.id}" do
         click_button "Delete"
       end
-
+      # save_and_open_page
+      require "pry"; binding.pry
       expect(current_path).to eq("/merchant/discounts")
       @merchant_1.discounts.reload
       expect(page).to_not have_css("#discount-#{@discount_1.id}")
