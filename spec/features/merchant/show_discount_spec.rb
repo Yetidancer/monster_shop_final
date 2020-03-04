@@ -23,19 +23,13 @@ RSpec.describe 'Merchant Discount Index' do
       @discount_2 = @merchant_1.discounts.create!(percent_off: 20, items_number: 10)
     end
 
-    xit 'should be able to delete discount' do
-      visit "/merchant/discounts"
+    it 'should' do
+      visit "/merchant/discounts/#{@discount_1.id}"
 
-      within "#discount-#{@discount_1.id}" do
-        click_button "Delete"
-      end
-      # require "pry"; binding.pry
-      expect(current_path).to eq("/merchant/discounts")
-      # save_and_open_page
-      # @merchant_1.discounts
-      expect(page).to_not have_css("#discount-#{@discount_1.id}")
-      expect(page).to_not have_content("Number of items needed: 5")
-      expect(page).to_not have_content("Percent off: 10")
+      expect(page).to have_content(@discount_1.id)
+      expect(page).to have_content(@discount_1.items_number)
+      expect(page).to have_content(@discount_1.percent_off)
+
     end
   end
 end

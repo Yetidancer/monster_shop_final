@@ -32,7 +32,8 @@ class OrderItem < ApplicationRecord
   end
 
   def apply_discount
-    self.update(discount_id: self.applied_discount.id)
+    discounted_price = ((100 - self.applied_discount.percent_off) * 0.01 * self.price)
+    self.update(discount_id: self.applied_discount.id, price: discounted_price)
   end
 
   def discounted_subtotal
